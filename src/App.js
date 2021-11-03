@@ -1,10 +1,9 @@
 import './App.css';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-import Users from './components/Users/Users';
-import Posts from './components/Posts/Posts';
-import PostDetails from './components/Posts/Post/PostDetails/PostDetails';
-import Comments from './components/Comments/Comments';
-import CommentDetails from './components/Comments/Comment/CommentDetails/CommentDetails';
+import Characters from './components/Сharacters/Сharacters';
+import CharacterDetails from './components/Сharacters/Сharacter/СharactersDetails/СharacterDetails';
+import Inventories from './components/Inventories/Inventories';
+import InventoryDetails from './components/Inventories/Inventory/Inventory';
 
 function App() {
     return (
@@ -15,24 +14,22 @@ function App() {
                 <div className='menubar'>
                     <Link to={'/'}>Home</Link>
                     <br/>
-                    <Link to={'/Users'}>Users</Link>
+                    <Link to={'/Characters'}>Characters</Link>
                     <br/>
-                    <Link to={'/Posts'}>Posts</Link>
+                    <Link to={'/Inventories'}>Inventories</Link>
                     <br/>
-                    <Link to={'/Comments'}>Comments</Link>
-                    <br/>
+
                 </div>
 
-                <h1></h1>
+                <br/>
 
                 <div className={'page'}>
                     <Switch>
                         <Route exact path={'/'} render={() => <div>Home page</div>}/>
-                        <Route path={'/Users'} component={Users}/>
-                        <Route exact path={'/Posts'} component={Posts}/>
-                        <Route path={'/Posts/:id'} component={PostDetails}/>
-                        <Route exact path={'/Comments'} component={Comments}/>
-                        <Route path={'/Comments/:id'} component={CommentDetails}/>
+                        <Route exact path={'/Characters'} component={Characters}/>
+                        <Route path={'/Characters/:id'} component={CharacterDetails}/>
+                        <Route exact path={'/Inventories'} component={Inventories}/>
+                        <Route path={'/Inventories/:id'} component={InventoryDetails}/>
                     </Switch>
                 </div>
             </div>
