@@ -1,15 +1,15 @@
 import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
 export default function PostDetails(props) {
-    let {match: {params: {id}}} = props;
+
+    let {match: {url, params: {id}}, location: {state}} = props;
 
     let [post, setPost] = useState(null);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/posts/' + id)
-            .then(value => value.json())
-            .then(value => setPost({...value}))
-    }, [post]);
+        setPost(state);
+    }, [id]);
 
     return (
         <div>
@@ -17,6 +17,9 @@ export default function PostDetails(props) {
             <div>
                 <h3>{post.id}. {post.title}</h3>
                 <p>{post.body}</p>
+                <div>
+                    <Link to={{pathname: `${url}/Comments`}}> Show post's comments</Link>
+                </div>
             </div>
             }
         </div>

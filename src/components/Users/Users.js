@@ -22,9 +22,6 @@ export default function Users(props) {
             {
                 users.map(value => <User key={value.id} item={value} url={url}/>)
             }
-            <Switch>
-                <Route path={'/Users/:id'} component={UserDetails}/>
-            </Switch>
         </div>
     );
 }
