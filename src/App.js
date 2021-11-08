@@ -18,7 +18,7 @@ function App() {
 
                 <div className={'page'}>
                     <Switch>
-                        <Route exact path={'/'} component={Users}/>
+                        <Route exact path={'/'} render={()=> <div>Home</div>}/>
                         <Route exact path={'/Users'} component={Users}/>
                         <Route exact path={'/Users/:id'} component={UserDetails}/>
                     </Switch>
