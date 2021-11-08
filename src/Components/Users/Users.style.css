@@ -1,0 +1,8 @@
+.Users {
+    display: flex;
+    justify-content: space-around;
+}
+.Buttons {
+    display: flex;
+    justify-content: center;
+}
