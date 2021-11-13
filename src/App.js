@@ -1,61 +1,134 @@
-import React from "react";
 import './App.css';
-import {useSelector, useDispatch} from "react-redux";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    startPostsLoading,
+    setPosts,
+    stopPostsLoading,
+    setPostsError,
+    setComments,
+    setCommentsError,
+    startCommentsLoading,
+    stopCommentsLoading
+} from './redux'
 
-const Counter = () => {
-    const counter = useSelector((state) => state.counter)
-
-
+const Comments = () => {
+    const data = useSelector(({comments}) => comments);
     const dispatch = useDispatch();
-    const [value, setValue] = React.useState(10)
+
+    const commentsFetcher = async () => {
+        try {
+            dispatch(startCommentsLoading());
+            const resp = await fetch('https://jsonplaceholder.typicode.com/comments')
+            const data = await resp.json();
+
+            dispatch(setComments(data));
+        } catch (e) {
+            console.log(e);
+
+            dispatch(setCommentsError('failed to fetch data'))
+        } finally {
+            dispatch(stopCommentsLoading())
+        }
+    }
+    useEffect(() => {
+        commentsFetcher();
+    }, []);
+
+    if (data.isCommentsLoading) {
+        return (
+            <h1>Comments are loading...</h1>
+        )
+    }
+
     return (
         <div>
-            <h1>Counter: {counter}</h1>
-
-            <input type="number" value={value} onChange={({target: {value}}) => {
-                setValue(value)
-            }
-            }/>
-
-            <button onClick={() => {
-                dispatch({type: 'INC_CUSTOM', payload: Number(value)})
-            }
-            }>INC CUSTOM
-            </button>
-
-            <button onClick={() => {
-                dispatch({type: 'INC'})
-            }
-            }>INC
-            </button>
-            <button onClick={() => {
-                dispatch({type: 'DEC'})
-            }
-            }>DEC
-            </button>
-            <button onClick={() => {
-                dispatch({type: 'RESET'})
-            }
-            }>RESET
-            </button>
+            {data.comments.map(({id, name, body}) => (
+                <div key={id}>
+                    <p>{name}</p>
+                    <p>{body}</p>
+                </div>
+            ))}
         </div>
+    )
+}
+const Posts = () => {
+    const data = useSelector((state) => state.posts);
+    const dispatch = useDispatch();
 
+    const postsFetcher = async () => {
+        try {
+            dispatch(startPostsLoading());
+            const resp = await fetch('https://jsonplaceholder.typicode.com/posts')
+            const data = await resp.json();
+
+            dispatch(setPosts(data));
+        } catch (e) {
+            console.log(e);
+
+            dispatch(setPostsError('failed to fetch data'))
+        } finally {
+            dispatch(stopPostsLoading())
+        }
+    }
+    useEffect(() => {
+        postsFetcher();
+    }, []);
+
+    if (data.isPostsLoading) {
+        return (
+            <h1>Posts are loading...</h1>
+        )
+    }
+
+    return (
+        <div>
+            {data.posts.map(({id, title, body}) => (
+                <div key={id}>
+                    <p>{title}</p>
+                    <p>{body}</p>
+                    <hr/>
+                </div>
+            ))}
+        </div>
     )
 }
 
 function App() {
-
-    const [isOn, setIsOn] = React.useState(true);
-
+    const [postsIsOn, setPostsIsOn] = React.useState(false);
+    const [commentsIsOn, setCommentsPostsIsOn] = React.useState(false);
 
     return (
         <div className="App">
-            {isOn && <Counter/>}
-            <button onClick={() => {
-                setIsOn(prev => !prev)
-            }
-            }>toggle
-            </button>
+            <div>
+                <h2>Posts</h2>
+                <button onClick={() => {
+                    setPostsIsOn(prev => !prev)
+                }
+                }>toggle
+                </button>
+                {postsIsOn && <Posts/>}
+                <button onClick={() => {
+                    setPostsIsOn(prev => !prev)
+                }
+                }>toggle
+                </button>
+            </div>
+            <hr/>
+            <div>
+                <h2>Comments</h2>
+                <button onClick={() => {
+                    setCommentsPostsIsOn(prev => !prev)
+                }
+                }>toggle
+                </button>
+                {commentsIsOn && <Comments/>}
+                <button onClick={() => {
+                    setCommentsPostsIsOn(prev => !prev)
+                }
+                }>toggle
+                </button>
+            </div>
         </div>
     );
 }
